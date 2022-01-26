@@ -31,6 +31,7 @@ public class AssignmentOnePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        setBackground(Color.WHITE); //addition
         g.setColor(colors[currentColor]);
         g.fillOval(x, y, diamater, diamater);
         g.setColor(Color.BLACK);
