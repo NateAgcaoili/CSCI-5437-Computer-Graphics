@@ -21,15 +21,29 @@ public class Demo2D extends JPanel {
         Area a2 = new Area(s2);
         a1.exclusiveOr(a2);
         return a1;*/
-        Path2D p = new Path2D.Double();
+        Path2D p = new Path2D.Double(Path2D.WIND_NON_ZERO);
+        double t = 0;
+        p.moveTo(280, 100);
+        int n = 200;
+        for (int i = 1; i < n; i++) {
+            t += 2 * Math.PI / n;
+            double x = 200 + 80 * Math.cos(t);
+            double y = 100 + 100 * Math.sin(t);
+            p.lineTo(x, y);
+        }
+        p.closePath();
+
         p.moveTo(10, 10);
-        p.lineTo(120, 200);
         p.lineTo(50, 150);
+        p.lineTo(230, 200);
+        //p.quadTo(200, 100, 50, 200);
+
         p.closePath();
-        p.moveTo(200, 100);
-        p.lineTo(300, 300);
-        p.lineTo(250, 150);
-        p.closePath();
+
+        /*p.moveTo(200, 100);
+        p.curveTo(200, 200, 50, 300, 100, 150);
+        //p.lineTo(300, 300);
+        p.lineTo(250, 150);*/
         return p;
     }
     @Override
