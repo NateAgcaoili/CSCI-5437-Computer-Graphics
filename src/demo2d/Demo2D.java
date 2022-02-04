@@ -2,10 +2,7 @@ package demo2d;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 
 public class Demo2D extends JPanel {
     Shape shape;
@@ -50,7 +47,12 @@ public class Demo2D extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g; //casting
-        g2.setColor(Color.BLUE);
+        //g2.setColor(new Color(0.5f, 0.7f, 0.2f));
+        g2.setPaint(new Color(0.5f, 0.7f, 0.2f));
+        AffineTransform tx = new AffineTransform();
+        tx.setToRotation(Math.PI/6); //rotates 30 degrees
+        tx.translate(50, 50);
+        g2.setTransform(tx);
         g2.fill(shape);
     }
 
