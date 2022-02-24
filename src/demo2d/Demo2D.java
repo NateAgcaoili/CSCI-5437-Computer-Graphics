@@ -2,13 +2,24 @@ package demo2d;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.*;
 
 public class Demo2D extends JPanel {
     Shape shape;
-
+    AffineTransform tx = new AffineTransform();
     public Demo2D() {
         shape = createShape();
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //tx.translate(5,5);
+                tx.rotate(Math.PI/60);
+                repaint();
+            }
+        });
+        timer.start();
     }
 
     public Shape createShape() {
@@ -49,9 +60,10 @@ public class Demo2D extends JPanel {
         Graphics2D g2 = (Graphics2D)g; //casting
         //g2.setColor(new Color(0.5f, 0.7f, 0.2f));
         g2.setPaint(new Color(0.5f, 0.7f, 0.2f));
-        AffineTransform tx = new AffineTransform();
-        tx.setToRotation(Math.PI/6); //rotates 30 degrees
-        tx.translate(50, 50);
+        //AffineTransform tx = new AffineTransform();
+        //tx.setToScale(-1,1);//setToTranslation(150, 50);//setToRotation(Math.PI/6); //rotates 30 degrees
+        //tx.rotate(Math.PI/6);
+        //tx.translate(-150, -50);
         g2.setTransform(tx);
         g2.fill(shape);
     }
