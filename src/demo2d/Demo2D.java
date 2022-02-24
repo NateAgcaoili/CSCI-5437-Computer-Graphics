@@ -1,10 +1,13 @@
 package demo2d;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class Demo2D extends JPanel {
     Shape shape;
@@ -20,6 +23,18 @@ public class Demo2D extends JPanel {
             }
         });
         timer.start();
+    }
+
+    public void saveImage(String filename) {
+        BufferedImage image = new BufferedImage(512, 512, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = image.createGraphics();
+        paintComponent(g2);
+        try{
+            ImageIO.write(image, "png", new File(filename));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public Shape createShape() {
@@ -70,7 +85,14 @@ public class Demo2D extends JPanel {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame(); //main display frame
-        frame.getContentPane().add(new Demo2D());
+        Container cp = frame.getContentPane();
+        cp.setLayout(new BorderLayout());
+        Demo2D demo = new Demo2D();
+        cp.add(demo, BorderLayout.CENTER);
+        JButton but = new JButton("capture and save");
+        cp.add(but, BorderLayout.NORTH);
+        but.addActionListener(e -> {demo.saveImage("demo.png");});
+        //frame.getContentPane().add();
         frame.setBounds(100, 100 , 500, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
