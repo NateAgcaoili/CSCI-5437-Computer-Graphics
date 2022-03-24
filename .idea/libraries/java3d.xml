@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="java3d">
+    <CLASSES>
+      <root url="file://C:/Program Files/Java/java3d" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://C:/Program Files/Java/java3d" recursive="false" />
+  </library>
+</component>
