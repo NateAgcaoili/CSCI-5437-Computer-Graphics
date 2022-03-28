@@ -7,7 +7,7 @@ import javax.vecmath.Point3f;
 
 /**
  *
- * @author 
+ * @author Nate Agcaoili
  */
 public class Octahedron extends IndexedTriangleArray {
 
