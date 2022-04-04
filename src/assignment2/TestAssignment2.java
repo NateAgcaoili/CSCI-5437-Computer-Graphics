@@ -13,8 +13,9 @@ public class TestAssignment2 extends JPanel {
     
     public TestAssignment2() {
         shapes[0] = Assignment2.createYingYang();
-        shapes[1] = Assignment2.createSpirograph();
-        setPreferredSize(new Dimension(400, 400));
+        shapes[1] = Assignment2.createCardioid();
+        //setPreferredSize(new Dimension(400, 400));
+        setPreferredSize(new Dimension(1200, 1200));
         setBackground(Color.white);
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent ev) {

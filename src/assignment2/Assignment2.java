@@ -12,7 +12,7 @@ import java.awt.geom.*;
 public class Assignment2 extends JPanel {
 
     public static Shape createYingYang() {
-        //initializing basic shapes
+        /*//initializing basic shapes
         Shape outline = new Ellipse2D.Double(-102, -102, 204, 204);
         Shape outlineSubtract = new Ellipse2D.Double(-100, -100, 200, 200);
         Shape mainBlack = new Ellipse2D.Double(-100, -100, 200, 200);
@@ -42,7 +42,22 @@ public class Assignment2 extends JPanel {
         a1.subtract(a8);
 
         //returning final product
+        return a1;*/
+        Ellipse2D c1 = new Ellipse2D.Double(0, 0, 400, 400);
+        Ellipse2D c2 = new Ellipse2D.Double(200, 0, 400, 400);
+        Ellipse2D c3 = new Ellipse2D.Double(100, 200, 400, 400);
+        Area a1 = new Area(c1);
+        Area a2 = new Area(c2);
+        Area a3 = new Area(c3);
+        Area a4 = new Area(c1);
+        a1.exclusiveOr(a2);
+        a2.subtract(a3);
+        a3.intersect(a1);
+        a4.intersect(a2);
+        a4.add(a3);
+
         return a1;
+
     }
 
     public static Shape createSpirograph() {
@@ -51,8 +66,7 @@ public class Assignment2 extends JPanel {
         double r1 = 30;
         double r2 = 40;
         double p = 60;
-        double x;
-        double y;
+        double x,y;
 
         //moving path to center
         spgPath.moveTo(0, 0);
@@ -66,5 +80,25 @@ public class Assignment2 extends JPanel {
 
         //returning final product
         return spgPath;
+    }
+
+    public static Shape createCardioid() {
+        //initializing variables
+        Path2D path = new Path2D.Double();
+        double x,y;
+        double a = 100;
+
+        //moving path to center
+        path.moveTo(0, 0);
+
+        //drawing the cardioid
+        for(double t = 0.0; t <= 2*Math.PI; t+=0.1) {
+            x = a * Math.cos(t) * (1 - Math.cos(t));
+            y = a * Math.sin(t) * (1 - Math.cos(t));;
+            path.lineTo(x, y);
+        }
+
+        //returning final product
+        return path;
     }
 }
