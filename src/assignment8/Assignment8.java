@@ -1,3 +1,4 @@
+package assignment8;
 
 import com.sun.j3d.utils.applet.MainFrame;
 import com.sun.j3d.utils.geometry.GeometryInfo;
@@ -22,24 +23,13 @@ import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Color3f;
-import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author hzhang
- */
-public class EllipticParabloid extends Applet {
+public class Assignment8 extends Applet {
     public static void main(String[] args) {
-        new MainFrame(new EllipticParabloid(), 640, 480);
+        new MainFrame(new Assignment8(), 640, 480);
     }
-    
+
     public void init() {
         GraphicsConfiguration gc = SimpleUniverse.getPreferredConfiguration();
         Canvas3D cv = new Canvas3D(gc);
@@ -51,7 +41,7 @@ public class EllipticParabloid extends Applet {
         su.getViewingPlatform().setNominalViewingTransform();
         su.addBranchGraph(bg);
     }
-    
+
     private BranchGroup createSceneGraph() {
         BranchGroup root = new BranchGroup();
         TransformGroup spin = new TransformGroup();
@@ -79,8 +69,8 @@ public class EllipticParabloid extends Applet {
         spin.addChild(rotator);
         //light
         PointLight light = new PointLight(new Color3f(Color.white),
-        new Point3f(0.5f,0.5f,1f),
-        new Point3f(1f,0.2f,0f));
+                new Point3f(0.5f,0.5f,1f),
+                new Point3f(1f,0.2f,0f));
         light.setInfluencingBounds(bounds);
         root.addChild(light);
         //background
@@ -89,13 +79,13 @@ public class EllipticParabloid extends Applet {
         root.addChild(background);
         return root;
     }
-    
+
     private Geometry createGeometry() {
         int m = 100;
         int n = 100;
         float vmin = -0.3f;
         float umax = (float) (2*Math.PI);
-        
+
         Point3f[] verts = new Point3f[(m+1)*(n+1)];
         int count = 0;
         // vertices
@@ -124,7 +114,7 @@ public class EllipticParabloid extends Applet {
                 inds[count++] = (i + 1) * m + j;
             }
         }
-        
+
         GeometryInfo gi = new GeometryInfo(GeometryInfo.QUAD_ARRAY);
         gi.setCoordinates(verts);
         gi.setCoordinateIndices(inds);

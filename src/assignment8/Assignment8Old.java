@@ -1,45 +1,21 @@
+package assignment8;
 
 import com.sun.j3d.utils.applet.MainFrame;
 import com.sun.j3d.utils.geometry.GeometryInfo;
 import com.sun.j3d.utils.geometry.NormalGenerator;
 import com.sun.j3d.utils.universe.SimpleUniverse;
-import java.applet.Applet;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GraphicsConfiguration;
-import javax.media.j3d.Alpha;
-import javax.media.j3d.Appearance;
-import javax.media.j3d.Background;
-import javax.media.j3d.BoundingSphere;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Canvas3D;
-import javax.media.j3d.Geometry;
-import javax.media.j3d.Material;
-import javax.media.j3d.PointLight;
-import javax.media.j3d.PolygonAttributes;
-import javax.media.j3d.RotationInterpolator;
-import javax.media.j3d.Shape3D;
-import javax.media.j3d.Transform3D;
-import javax.media.j3d.TransformGroup;
+
+import javax.media.j3d.*;
 import javax.vecmath.Color3f;
-import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
+import java.applet.Applet;
+import java.awt.*;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author hzhang
- */
-public class EllipticParabloid extends Applet {
+public class Assignment8Old extends Applet {
     public static void main(String[] args) {
-        new MainFrame(new EllipticParabloid(), 640, 480);
+        new MainFrame(new Assignment8Old(), 640, 480);
     }
-    
+
     public void init() {
         GraphicsConfiguration gc = SimpleUniverse.getPreferredConfiguration();
         Canvas3D cv = new Canvas3D(gc);
@@ -51,7 +27,7 @@ public class EllipticParabloid extends Applet {
         su.getViewingPlatform().setNominalViewingTransform();
         su.addBranchGraph(bg);
     }
-    
+
     private BranchGroup createSceneGraph() {
         BranchGroup root = new BranchGroup();
         TransformGroup spin = new TransformGroup();
@@ -64,7 +40,7 @@ public class EllipticParabloid extends Applet {
         pa.setBackFaceNormalFlip(true);
         pa.setCullFace(PolygonAttributes.CULL_NONE);
         ap.setPolygonAttributes(pa);
-        Shape3D shape = new Shape3D(createGeometry(), ap);
+        Shape3D shape = new Shape3D(createMobius(), ap);
         //transformation
         Transform3D tr = new Transform3D();
         tr.setScale(0.4);
@@ -79,8 +55,8 @@ public class EllipticParabloid extends Applet {
         spin.addChild(rotator);
         //light
         PointLight light = new PointLight(new Color3f(Color.white),
-        new Point3f(0.5f,0.5f,1f),
-        new Point3f(1f,0.2f,0f));
+                new Point3f(0.5f,0.5f,1f),
+                new Point3f(1f,0.2f,0f));
         light.setInfluencingBounds(bounds);
         root.addChild(light);
         //background
@@ -89,48 +65,49 @@ public class EllipticParabloid extends Applet {
         root.addChild(background);
         return root;
     }
-    
-    private Geometry createGeometry() {
-        int m = 100;
-        int n = 100;
-        float vmin = -0.3f;
-        float umax = (float) (2*Math.PI);
-        
-        Point3f[] verts = new Point3f[(m+1)*(n+1)];
+
+    private Geometry createMobius(){
+        int m = 100; //number of row points
+        int n = 100; //number of col points
+        int p = 4*((m-1)*(n-1)); //faces * points per face
+
+        IndexedQuadArray iqa = new IndexedQuadArray(m*n,
+                GeometryArray.COORDINATES, p);
+        Point3f[] vertices = new Point3f[m*n];
         int count = 0;
-        // vertices
+
+        //Create vertices
         for(int i = 0; i < m; i++)
         {
             for(int j = 0; j < n; j++)
             {
-                float u = i * (umax) / (m - 1);
-                float v = (float)(vmin + (j * (0.6/(n-1))));
+                float u = (float)(i * (2 * (Math.PI)) / (m - 1));
+                float v = (float)(-0.3 + (j * (0.6/(n-1))));
                 float x = (float)((1 + v * Math.cos(u / 2)) * Math.cos(u));
                 float y = (float)((1 + v * Math.cos(u / 2)) * Math.sin(u));
                 float z = (float)(v * Math.sin(u / 2));
-                verts[count]=new Point3f(x,y,z);
+                vertices[count]=new Point3f(x,y,z);
                 count++;
+            }//close nested for loop
+        }//close for loop
+
+        iqa.setCoordinates(0, vertices);
+        count = 0;
+
+        //set count for coordinates
+        for(int i = 0; i < m-1; i++){
+            for(int j = 0; j < n-1; j++){
+                iqa.setCoordinateIndex(count++, i*m+j);
+                iqa.setCoordinateIndex(count++, i*m+j+1);
+                iqa.setCoordinateIndex(count++, (i+1)*m+j+1);
+                iqa.setCoordinateIndex(count++, (i+1)*m+j);
             }
         }
 
-        // indices
-        int[] inds = new int[4*m*n];
-        count = 0;
-        for (int i = 0; i < m - 1; i++) {
-            for (int j = 0; j < n - 1; j++) {
-                inds[count++] = i * m + j;
-                inds[count++] = i * m + j + 1;
-                inds[count++] = (i + 1) * m +j + 1;
-                inds[count++] = (i + 1) * m + j;
-            }
-        }
-        
-        GeometryInfo gi = new GeometryInfo(GeometryInfo.QUAD_ARRAY);
-        gi.setCoordinates(verts);
-        gi.setCoordinateIndices(inds);
+        //create geometry info and generate normals for shape
+        GeometryInfo gi = new GeometryInfo(iqa);
         NormalGenerator ng = new NormalGenerator();
         ng.generateNormals(gi);
         return gi.getGeometryArray();
     }
-
 }
